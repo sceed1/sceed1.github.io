@@ -1,0 +1,40 @@
+<mat-card style="margin: 1rem;">
+    <mat-card-header>
+        <div class="header">
+            <h2 *ngIf="companyName$ | async as companyName; else loadingTitle">{{companyName}} ({{stockId}})</h2>
+            <mat-icon (click)="removeStockTracking()">close</mat-icon>
+        </div>
+    </mat-card-header>
+    <div *ngIf="quoteData$ | async as data">
+        <div class="row" *ngIf="data.currentPrice > 0; else noDataFound">
+            <div class="col">
+                <p>Change today: {{data.percentChange}}%</p>
+                <p>Current price: ${{data.currentPrice}}</p>
+            </div>
+            <div class="col">
+                <p>Opening price: ${{data.openPriceOfTheDay}}</p>
+                <p>High price: ${{data.highPriceOfTheDay}}</p>
+            </div>
+            <div class="col">
+                <mat-icon 
+                    [ngStyle]="{'color': data.percentChange >= 0 ? 'green' : 'red'}" 
+                    class="icon">{{data.percentChange >= 0 ? 'arrow_upward' : 'arrow_downward'}}
+                </mat-icon>
+            </div>
+        </div>
+    </div>
+    <mat-card-actions align="end">
+        <button 
+            mat-stroked-button
+            (click)="navigateToSentimentDetials(stockId)">
+            Go to social sentiment details</button>
+    </mat-card-actions>
+</mat-card>
+
+<ng-template #loadingTitle>
+    <h2>Loading title for symbol {{stockId}} ... </h2>
+</ng-template>
+
+<ng-template #noDataFound>
+    <p style="margin-left: 2rem; color: red">No data found searching for: {{stockId}}</p>
+</ng-template>
