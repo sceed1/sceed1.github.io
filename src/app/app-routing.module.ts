@@ -10,7 +10,7 @@ const routes: Routes = [
   },
   {
     path: 'sentiment/:stockId',
-    component: StockSentimentComponent
+    component: StockSentimentComponent,
   }
 ];
 

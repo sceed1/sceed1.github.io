@@ -1,27 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { first, map, Observable, tap } from 'rxjs';
-import { QuoteData } from './model/stock';
-
-interface ApiQuoteData {
-  c: number,
-  d: number,
-  dp: number,
-  h: number,
-  l: number,
-  o: number,
-  pc: number,
-}
-
-interface ApiSymbolLookup {
-  count: number,
-  result: {
-    description: string,
-    displaySymbol: string,
-    symbol: string,
-    type: string
-  }[]
-}
+import { first, map, Observable } from 'rxjs';
+import { ApiQuoteData, ApiSentimentData, ApiSymbolLookup, QuoteData, SentimentData } from './model/stock';
 
 @Injectable({
   providedIn: 'root'
@@ -50,5 +30,20 @@ export class StockService {
     .pipe(
       first(),
       map((val: ApiSymbolLookup) => val.result[0].description)
+    )
+
+  retrieveSentimentData = (stockId: string, startDate: string, endDate: string): Observable<SentimentData[]> =>
+    this.http.get<ApiSentimentData>(`https://finnhub.io/api/v1/stock/insider-sentiment?symbol=${stockId}&from=${startDate}&to=${endDate}&token=${this.token}`)
+    .pipe(
+      first(),
+      map((result: ApiSentimentData) => {
+        const sentimentData: SentimentData[] = [];
+        result.data.flatMap(date => sentimentData.push({
+          change: date.change, 
+          mspr: date.mspr,
+          month: date.month
+        } as SentimentData))
+        return sentimentData;
+      })
     )
 }

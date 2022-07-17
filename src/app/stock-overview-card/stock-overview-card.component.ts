@@ -24,7 +24,6 @@ export class StockOverviewCardComponent implements OnInit {
     if (this.stockId) {
       this.companyName$ = this.stockService.retrieveCompanyName(this.stockId);
       this.quoteData$ = this.stockService.retrieveQuoteData(this.stockId);
-      this.quoteData$.subscribe(data => console.log('quoteData: ', data));
     }
   }
 

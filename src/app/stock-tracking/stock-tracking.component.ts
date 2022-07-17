@@ -13,8 +13,11 @@ export class StockTrackingComponent {
 
   @Output() stockTracked = new EventEmitter<string>();
 
-
-  trackStock = (value: string) => 
-    this.stockId.valid ? this.stockTracked.emit(value.toUpperCase()) : console.log('not today son');
+  trackStock = (value: string) => {
+    if (this.stockId.valid) {
+      this.stockTracked.emit(value.toUpperCase())
+      this.stockId.reset();
+    }
+  }
 
 }

@@ -15,6 +15,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StockOverviewCardComponent } from './stock-overview-card/stock-overview-card.component';
 import { StockSentimentComponent } from './stock-sentiment/stock-sentiment.component'
+import { SentimentMonthDetailsComponent } from './sentiment-month-details/sentiment-month-details.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { StockSentimentComponent } from './stock-sentiment/stock-sentiment.compo
     HomeComponent,
     StockTrackingComponent,
     StockOverviewCardComponent,
-    StockSentimentComponent
+    StockSentimentComponent,
+    SentimentMonthDetailsComponent,
   ],
   imports: [
     BrowserModule,
