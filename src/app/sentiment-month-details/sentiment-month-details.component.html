@@ -1,5 +1,11 @@
-<div>
-    <p>{{toMonthName(sentimentData.month)}}</p>
-    <p>Change: {{sentimentData.change}}</p>
-    <p>MSPR: {{sentimentData.mspr}}</p>
+<div class="content">
+    <div>
+        <p>{{toMonthName(sentimentData.month) | uppercase}}</p>
+        <p>Change: {{sentimentData.change}}</p>
+        <p>MSPR: {{sentimentData.mspr}}</p>
+    </div>
+    <mat-icon
+        [ngStyle]="{'color': sentimentData.change >= 0 ? 'green' : 'red'}" 
+        class="icon">{{sentimentData.change >= 0 ? 'arrow_upward' : 'arrow_downward'}}
+    </mat-icon>
 </div>

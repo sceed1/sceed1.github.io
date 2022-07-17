@@ -3,9 +3,23 @@
         <h2>{{companyName}}</h2>
     </mat-card-header>
 
+    <div *ngIf="sentimentData$ | async as sentimentData" class="sentiments">
+        <app-sentiment-month-details
+            [sentimentData]="sentimentData[0]">
+        </app-sentiment-month-details>
+
+        <app-sentiment-month-details
+            [sentimentData]="sentimentData[1]">
+        </app-sentiment-month-details>
+        
+        <app-sentiment-month-details
+            [sentimentData]="sentimentData[2]">
+        </app-sentiment-month-details>
+    </div>
+
 </mat-card>
 
 <button mat-raised-button [routerLink]="''" style="margin: 2rem;">
-    <mat-icon>chevron_left</mat-icon>
+    <mat-icon style="margin-bottom: 3px;">chevron_left</mat-icon>
     Back to list of stocks
 </button>
