@@ -1,44 +1,52 @@
-import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http'
+import { NgModule } from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-
-import { StockTrackingComponent } from './stock-tracking/stock-tracking.component'
-import { MatCardModule } from '@angular/material/card'
-import {MatButtonModule} from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input'
-import { MatIconModule } from '@angular/material/icon'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { StockOverviewCardComponent } from './stock-overview-card/stock-overview-card.component';
-import { StockSentimentComponent } from './stock-sentiment/stock-sentiment.component'
-import { SentimentMonthDetailsComponent } from './sentiment-month-details/sentiment-month-details.component';
+import { LocationEntryComponent } from './main-page/zipcode/location-entry/location-entry.component';
+import {LocationService} from "./location.service";
+import { ForecastsListComponent } from './forecast/forecasts-list/forecasts-list.component';
+import {WeatherService} from "./weather.service";
+import { CurrentConditionsComponent } from './main-page/current-conditions/current-conditions.component';
+import { MainPageComponent } from './main-page/main-page.component';
+import {RouterModule} from "@angular/router";
+import {routing} from "./app.routing";
+import {HttpClientModule} from "@angular/common/http";
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { reducers, metaReducers } from './index';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import {WeatherEffects} from './main-page/weather-state/weather.effects';
+import {ZipEntryEffects} from './main-page/zipcode/location-entry/location-entry-state/zip-entry.effects';
+import { TemplateButtonComponent } from './shared/template-button/template-button.component';
+import { CountryInputComponent } from './main-page/zipcode/location-entry/country-input/country-input.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
-    StockTrackingComponent,
-    StockOverviewCardComponent,
-    StockSentimentComponent,
-    SentimentMonthDetailsComponent,
+    LocationEntryComponent,
+    CurrentConditionsComponent,
+    ForecastsListComponent,
+    MainPageComponent,
+    TemplateButtonComponent,
+    CountryInputComponent
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    MatCardModule,
-    MatButtonModule,
-    MatInputModule,
-    MatIconModule,
     FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule,
+    routing,
+    ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production}),
+    StoreModule.forRoot({}, {}),
+    EffectsModule.forRoot([WeatherEffects, ZipEntryEffects]),
+    StoreModule.forRoot(reducers, {metaReducers}),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
+    ReactiveFormsModule
   ],
-  providers: [],
+  providers: [LocationService, WeatherService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
