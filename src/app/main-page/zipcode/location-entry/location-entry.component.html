@@ -1,0 +1,38 @@
+<div class="well">
+  <h2>Enter a location:</h2>
+  <div class="row">
+    <div class="col-lg-2 col-md-2">
+      <app-country-input (selectCountryEvent)="selectCountry($event)"></app-country-input>
+    </div>
+    <div class="col-lg-2 col-md-2">
+      <input type="text" #zipcode placeholder="Zipcode" class="form-control">
+    </div>
+  </div>
+
+  <br>
+  <ng-container *ngIf="addLocationButtonState$ | async as buttonState">
+    <app-template-button
+      [currentTemplate]="determineTemplateRef(buttonState)"
+      [disabled]="isButtonDisabled(buttonState)"
+      (buttonClicked)="addLocation(zipcode.value)">
+    </app-template-button>
+  </ng-container>
+</div>
+
+<ng-template #initial >
+  <div class="btn btn-primary">
+    Add location
+  </div>
+</ng-template>
+
+<ng-template #loading>
+  <div class="btn btn-warning">
+    Adding...
+  </div>
+</ng-template>
+
+<ng-template #success>
+  <div class="btn btn-success">
+    <i class="bi bi-check"></i> Done
+  </div>
+</ng-template>

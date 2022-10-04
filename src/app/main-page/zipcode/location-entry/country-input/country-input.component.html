@@ -1,0 +1,11 @@
+<form [formGroup]="form">
+  <input formControlName="country" type="text" placeholder="Country" class="form-control" (focusout)="focusOut()">
+  <div *ngIf="searchValue.length > 0 && !countrySelected" class="list-group overlap">
+    <ng-container *ngFor="let c of filteredCountries" >
+      <div (click)="selectCountry(c)" class="list-group-item">
+        <span>{{getPrefix(c.name)}}</span><b><span>{{getText(c.name)}}</span></b><span>{{getSuffix(c.name)}}</span>
+      </div>
+    </ng-container>
+  </div>
+</form>
+
