@@ -150,7 +150,7 @@ const appRoutes = [
         path: '', component: _main_page_main_page_component__WEBPACK_IMPORTED_MODULE_0__.MainPageComponent
     },
     {
-        path: 'forecast/:zipcode/:countryCode', component: _forecast_forecasts_list_forecasts_list_component__WEBPACK_IMPORTED_MODULE_1__.ForecastsListComponent
+        path: 'forecast/:zipcode/country/:countryCode', component: _forecast_forecasts_list_forecasts_list_component__WEBPACK_IMPORTED_MODULE_1__.ForecastsListComponent
     }
 ];
 const routing = _angular_router__WEBPACK_IMPORTED_MODULE_2__.RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' });
@@ -340,7 +340,7 @@ let CurrentConditionsComponent = class CurrentConditionsComponent {
         (0,rxjs__WEBPACK_IMPORTED_MODULE_6__.interval)(30000).subscribe(() => this.autoRefresh ? this.store.dispatch((0,_weather_state_weather_action__WEBPACK_IMPORTED_MODULE_5__.refreshAllWeatherLocations)()) : void 0);
     }
     showForecast(location) {
-        this.router.navigate(['/forecast', location.zipcode, location.countryCode || 'US']);
+        this.router.navigate(['/forecast', location.zipcode, 'country', location.countryCode || 'US']);
     }
 };
 CurrentConditionsComponent.ctorParameters = () => [
@@ -785,7 +785,7 @@ LocationEntryComponent.ctorParameters = () => [
 LocationEntryComponent.propDecorators = {
     initialButtonTemplate: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_4__.ViewChild, args: ['initial', { read: _angular_core__WEBPACK_IMPORTED_MODULE_4__.TemplateRef },] }],
     loadingButtonTemplate: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_4__.ViewChild, args: ['loading', { read: _angular_core__WEBPACK_IMPORTED_MODULE_4__.TemplateRef },] }],
-    successButtonTemplate: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_4__.ViewChild, args: ['success', { read: _angular_core__WEBPACK_IMPORTED_MODULE_4__.TemplateRef },] }]
+    doneButtonTemplate: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_4__.ViewChild, args: ['done', { read: _angular_core__WEBPACK_IMPORTED_MODULE_4__.TemplateRef },] }]
 };
 LocationEntryComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_5__.__decorate)([
     (0,_angular_core__WEBPACK_IMPORTED_MODULE_4__.Component)({
@@ -849,6 +849,7 @@ TemplateButtonComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_3__.__decorate)([
     (0,_angular_core__WEBPACK_IMPORTED_MODULE_2__.Component)({
         selector: 'app-template-button',
         template: _template_button_component_html_ngResource__WEBPACK_IMPORTED_MODULE_0__,
+        changeDetection: _angular_core__WEBPACK_IMPORTED_MODULE_2__.ChangeDetectionStrategy.OnPush,
         styles: [_template_button_component_scss_ngResource__WEBPACK_IMPORTED_MODULE_1__]
     })
 ], TemplateButtonComponent);
@@ -878,15 +879,6 @@ let WeatherService = class WeatherService {
         this.http = http;
         this.currentConditions = [];
         this.fetchCurrentConditionsForLocation = (location) => this.http.get(`${WeatherService.URL}/weather?zip=${location.zipcode}${location.countryCode ? ',' + location.countryCode : ''}&units=imperial&APPID=${WeatherService.APPID}`);
-    }
-    removeCurrentConditions(zipcode) {
-        for (let i in this.currentConditions) {
-            if (this.currentConditions[i].zip == zipcode)
-                this.currentConditions.splice(+i, 1);
-        }
-    }
-    getCurrentConditions() {
-        return this.currentConditions;
     }
     getForecast(location) {
         // Here we make a request to get the forecast data from the API. Note the use of backticks and an expression to insert the zipcode
@@ -1043,7 +1035,7 @@ module.exports = "<div>\n  <div class=\"panel panel-default\">\n    <div class=\
   \*******************************************************************************************/
 /***/ ((module) => {
 
-module.exports = "<div>\n  <div class=\"well\">\n    <h4>Activate automatic refresh</h4>\n    <label class=\"switch\">\n      <input\n        type=\"checkbox\"\n        [(ngModel)]=\"autoRefresh\"\n        [ngModelOptions]=\"{standalone: true}\"/>\n      <span class=\"slider round\"></span>\n    </label>\n\n  </div>\n  <div *ngFor=\"let weatherCondition of currentWeatherConditions$ | async\" class=\"well flex\" (click)=\"showForecast(weatherCondition.location)\">\n    <div>\n      <h3>{{weatherCondition.condition.name}} ({{weatherCondition.location.zipcode}})</h3>\n      <h4>Current conditions: {{weatherCondition.condition.weather[0].main}}</h4>\n      <h4>Temperatures today:</h4>\n      <p>\n        Current {{weatherCondition.condition.main.temp | number:'.0-0'}}\n        - Max {{weatherCondition.condition.main.temp_max | number:'.0-0'}}\n        - Min {{weatherCondition.condition.main.temp_min | number:'.0-0'}}\n      </p>\n      <p>\n        <a [routerLink]=\"['/forecast', weatherCondition.location.zipcode]\" >Show 5-day forecast for {{weatherCondition.condition.name}}</a>\n      </p>\n    </div>\n    <div>\n      <span class=\"close\" (click)=\"locationService.removeLocation(weatherCondition.location)\">&times;</span>\n      <img [src]=\"weatherService.getWeatherIcon(weatherCondition.condition.weather[0].id)\">\n    </div>\n </div>\n</div>\n";
+module.exports = "<div>\n  <div class=\"well\">\n    <h4>Activate automatic refresh</h4>\n    <label class=\"switch\">\n      <input\n        type=\"checkbox\"\n        [(ngModel)]=\"autoRefresh\"\n        [ngModelOptions]=\"{standalone: true}\"/>\n      <span class=\"slider round\"></span>\n    </label>\n\n  </div>\n  <div *ngFor=\"let weatherCondition of currentWeatherConditions$ | async\" class=\"well flex\" (click)=\"showForecast(weatherCondition.location)\">\n    <div>\n      <h3>{{weatherCondition.condition.name}} ({{weatherCondition.location.zipcode}})</h3>\n      <h4>Current conditions: {{weatherCondition.condition.weather[0].main}}</h4>\n      <h4>Temperatures today:</h4>\n      <p>\n        Current {{weatherCondition.condition.main.temp | number:'.0-0'}}\n        - Max {{weatherCondition.condition.main.temp_max | number:'.0-0'}}\n        - Min {{weatherCondition.condition.main.temp_min | number:'.0-0'}}\n      </p>\n      <p>\n        <a (click)=\"showForecast(weatherCondition.location)\" >Show 5-day forecast for {{weatherCondition.condition.name}}</a>\n      </p>\n    </div>\n    <div>\n      <span class=\"close\" (click)=\"locationService.removeLocation(weatherCondition.location)\">&times;</span>\n      <img [src]=\"weatherService.getWeatherIcon(weatherCondition.condition.weather[0].id)\">\n    </div>\n </div>\n</div>\n";
 
 /***/ }),
 
@@ -1073,7 +1065,7 @@ module.exports = "<form [formGroup]=\"form\">\n  <input formControlName=\"countr
   \*******************************************************************************************/
 /***/ ((module) => {
 
-module.exports = "<div class=\"well\">\n  <h2>Enter a location:</h2>\n  <div class=\"row\">\n    <div class=\"col-lg-2 col-md-2\">\n      <app-country-input (selectCountryEvent)=\"selectCountry($event)\"></app-country-input>\n    </div>\n    <div class=\"col-lg-2 col-md-2\">\n      <input type=\"text\" #zipcode placeholder=\"Zipcode\" class=\"form-control\">\n    </div>\n  </div>\n\n  <br>\n  <ng-container *ngIf=\"addLocationButtonState$ | async as buttonState\">\n    <app-template-button\n      [currentTemplate]=\"determineTemplateRef(buttonState)\"\n      [disabled]=\"isButtonDisabled(buttonState)\"\n      (buttonClicked)=\"addLocation(zipcode.value)\">\n    </app-template-button>\n  </ng-container>\n</div>\n\n<ng-template #initial >\n  <div class=\"btn btn-primary\">\n    Add location\n  </div>\n</ng-template>\n\n<ng-template #loading>\n  <div class=\"btn btn-warning\">\n    Adding...\n  </div>\n</ng-template>\n\n<ng-template #success>\n  <div class=\"btn btn-success\">\n    <i class=\"bi bi-check\"></i> Done\n  </div>\n</ng-template>\n";
+module.exports = "<div class=\"well\">\n  <h2>Enter a location:</h2>\n  <div class=\"row\">\n    <div class=\"col-lg-2 col-md-2\">\n      <app-country-input (selectCountryEvent)=\"selectCountry($event)\"></app-country-input>\n    </div>\n    <div class=\"col-lg-2 col-md-2\">\n      <input type=\"text\" #zipcode placeholder=\"Zipcode\" class=\"form-control\">\n    </div>\n  </div>\n\n  <br>\n  <ng-container *ngIf=\"addLocationButtonState$ | async as buttonState\">\n    <app-template-button\n      [currentTemplate]=\"buttonState === 'initial' ? initial : buttonState === 'loading' ? loading : done\"\n      [disabled]=\"isButtonDisabled(buttonState)\"\n      (buttonClicked)=\"addLocation(zipcode.value)\">\n    </app-template-button>\n  </ng-container>\n</div>\n\n<ng-template #initial >\n  <div class=\"btn btn-primary\">\n    Add location\n  </div>\n</ng-template>\n\n<ng-template #loading>\n  <div class=\"btn btn-warning\">\n    Adding...\n  </div>\n</ng-template>\n\n<ng-template #done>\n  <div class=\"btn btn-success\">\n    <i class=\"bi bi-check\"></i> Done\n  </div>\n</ng-template>\n";
 
 /***/ }),
 
