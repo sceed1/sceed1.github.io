@@ -12,7 +12,7 @@
   <br>
   <ng-container *ngIf="addLocationButtonState$ | async as buttonState">
     <app-template-button
-      [currentTemplate]="determineTemplateRef(buttonState)"
+      [currentTemplate]="buttonState === 'initial' ? initial : buttonState === 'loading' ? loading : done"
       [disabled]="isButtonDisabled(buttonState)"
       (buttonClicked)="addLocation(zipcode.value)">
     </app-template-button>
@@ -31,7 +31,7 @@
   </div>
 </ng-template>
 
-<ng-template #success>
+<ng-template #done>
   <div class="btn btn-success">
     <i class="bi bi-check"></i> Done
   </div>

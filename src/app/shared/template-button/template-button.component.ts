@@ -1,9 +1,10 @@
-import {Component, EventEmitter, Input, Output, TemplateRef} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef} from '@angular/core';
 
 @Component({
   selector: 'app-template-button',
   templateUrl: './template-button.component.html',
-  styleUrls: ['./template-button.component.scss']
+  styleUrls: ['./template-button.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TemplateButtonComponent {
 

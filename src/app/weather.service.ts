@@ -17,18 +17,6 @@ export class WeatherService {
   fetchCurrentConditionsForLocation = (location: Location): Observable<APIWeatherConditions> =>
     this.http.get<APIWeatherConditions>(`${WeatherService.URL}/weather?zip=${location.zipcode}${location.countryCode ? ',' + location.countryCode : ''}&units=imperial&APPID=${WeatherService.APPID}`)
 
-
-  removeCurrentConditions(zipcode: string) {
-    for (let i in this.currentConditions){
-      if (this.currentConditions[i].zip == zipcode)
-        this.currentConditions.splice(+i, 1);
-    }
-  }
-
-  getCurrentConditions(): any[] {
-    return this.currentConditions;
-  }
-
   getForecast(location: Location): Observable<any> {
     // Here we make a request to get the forecast data from the API. Note the use of backticks and an expression to insert the zipcode
     return this.http.get(`${WeatherService.URL}/forecast/daily?zip=${location.zipcode}${location.countryCode ? ',' + location.countryCode : ''}&units=imperial&cnt=5&APPID=${WeatherService.APPID}`);

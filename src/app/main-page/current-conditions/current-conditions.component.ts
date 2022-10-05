@@ -35,6 +35,6 @@ export class CurrentConditionsComponent implements OnInit {
   }
 
   showForecast(location: Location){
-    this.router.navigate(['/forecast', location.zipcode, location.countryCode || 'US'])
+    this.router.navigate(['/forecast', location.zipcode, 'country', location.countryCode || 'US'])
   }
 }

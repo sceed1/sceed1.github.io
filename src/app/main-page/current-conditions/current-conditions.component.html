@@ -21,7 +21,7 @@
         - Min {{weatherCondition.condition.main.temp_min | number:'.0-0'}}
       </p>
       <p>
-        <a [routerLink]="['/forecast', weatherCondition.location.zipcode]" >Show 5-day forecast for {{weatherCondition.condition.name}}</a>
+        <a (click)="showForecast(weatherCondition.location)" >Show 5-day forecast for {{weatherCondition.condition.name}}</a>
       </p>
     </div>
     <div>

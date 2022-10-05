@@ -762,7 +762,7 @@ let LocationEntryComponent = class LocationEntryComponent {
         this.addLocation = (zipcode) => this.service.addLocation({ zipcode, countryCode: this.selectedCountry?.code });
         this.determineTemplateRef = (buttonState) => {
             if (buttonState === 'done') {
-                return this.successButtonTemplate;
+                return this.doneButtonTemplate;
             }
             else if (buttonState === 'loading') {
                 return this.loadingButtonTemplate;

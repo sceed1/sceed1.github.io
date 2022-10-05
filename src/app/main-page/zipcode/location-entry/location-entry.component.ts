@@ -17,7 +17,7 @@ export class LocationEntryComponent implements OnInit {
 
   @ViewChild('initial', { read: TemplateRef }) initialButtonTemplate:TemplateRef<any>;
   @ViewChild('loading', { read: TemplateRef }) loadingButtonTemplate:TemplateRef<any>;
-  @ViewChild('success', { read: TemplateRef }) successButtonTemplate:TemplateRef<any>;
+  @ViewChild('done', { read: TemplateRef }) doneButtonTemplate:TemplateRef<any>;
 
   constructor(private service : LocationService, private store: Store) { }
 
@@ -28,7 +28,7 @@ export class LocationEntryComponent implements OnInit {
   addLocation = (zipcode : string) => this.service.addLocation({zipcode, countryCode: this.selectedCountry?.code});
 
   determineTemplateRef = (buttonState: ButtonState) => {
-    if (buttonState === 'done') { return this.successButtonTemplate; }
+    if (buttonState === 'done') { return this.doneButtonTemplate; }
     else if (buttonState === 'loading') { return this.loadingButtonTemplate; }
     else { return this.initialButtonTemplate; }
   }
